@@ -1,6 +1,6 @@
 import 'package:isar/isar.dart';
 
-import './food_item.dart';
+import 'recipe_item.dart';
 
 part 'recipe_isar.g.dart';
 

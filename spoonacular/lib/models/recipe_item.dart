@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'food_item.freezed.dart';
-part 'food_item.g.dart';
+part 'recipe_item.freezed.dart';
+part 'recipe_item.g.dart';
 
 @freezed
 class Recipe with _$Recipe {
