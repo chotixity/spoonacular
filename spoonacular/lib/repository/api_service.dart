@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import '../models/cart_item.dart';
 import 'package:spoonacular/models/recipe_item.dart';
 import 'package:spoonacular/repository/local_storage.dart';
 import '../models/recipe_isar.dart';
@@ -27,5 +28,21 @@ class ApiService {
     } else {
       throw Exception('Failed to load food items');
     }
+  }
+
+  Future<void> checkout(List<CartItem> cartItems) async {
+    final url = Uri.https(baseUrl, '/checkout'); // Dummy endpoint
+
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(cartItems.map((item) => item.toJson()).toList()),
+    );
+    Future.delayed(const Duration(milliseconds: 200));
+    // if (response.statusCode == 200) {
+    //   debugPrint('Checkout successful');
+    // } else {
+    //   throw Exception('Failed to checkout');
+    // }
   }
 }

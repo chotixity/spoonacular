@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:spoonacular/logic/recipe_store.dart';
+import 'package:spoonacular/models/recipe_store.dart';
+import 'package:spoonacular/presentation/screens/success_checkout.dart';
 import '../../models/cart_item.dart';
 
 class CartScreen extends StatelessWidget {
@@ -39,13 +40,27 @@ class CartScreen extends StatelessWidget {
                             leading: Image.network(cartItem.image),
                             title: Text(cartItem.name),
                             subtitle: Text('Quantity: ${cartItem.count}'),
+                            trailing: IconButton(
+                              onPressed: () {
+                                recipeStore.removeFromCart(cartItem.id);
+                              },
+                              icon: const Icon(
+                                Icons.delete_forever,
+                              ),
+                            ),
                           ),
                         );
                       },
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      recipeStore.checkout();
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SuccessCheckout()));
+                    },
                     child: const Text('Checkout'),
                   )
                 ],

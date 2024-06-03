@@ -2,7 +2,7 @@ import 'package:mobx/mobx.dart';
 import 'package:spoonacular/models/cart_item.dart';
 import 'package:spoonacular/models/recipe_isar.dart';
 import 'package:spoonacular/repository/local_storage.dart';
-import '../models/recipe_item.dart';
+import 'recipe_item.dart';
 import '../repository/api_service.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -44,5 +44,11 @@ abstract class _RecipeStore with Store {
     final cartItemsList = await LocalStorage.getCartItems();
     print('This is the cart Item List $cartItemsList');
     cartItems = ObservableList<CartItem>.of(cartItemsList);
+  }
+
+  Future<void> checkout() async {
+    await _apiService.checkout(cartItems);
+    await LocalStorage.clearCart();
+    _updateCartItems();
   }
 }

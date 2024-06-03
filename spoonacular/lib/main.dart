@@ -2,7 +2,7 @@ import 'dart:isolate';
 
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:spoonacular/logic/recipe_store.dart';
+import 'package:spoonacular/models/recipe_store.dart';
 import 'package:spoonacular/presentation/screens/homepage.dart';
 import 'package:spoonacular/repository/api_service.dart';
 import 'package:spoonacular/repository/local_storage.dart';

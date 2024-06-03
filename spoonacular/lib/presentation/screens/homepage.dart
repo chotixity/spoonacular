@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:spoonacular/logic/recipe_store.dart';
+import 'package:spoonacular/models/recipe_store.dart';
 import 'package:mobx/mobx.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import '../../models/recipe_item.dart';
