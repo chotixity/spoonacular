@@ -38,6 +38,12 @@ class _HomepageState extends State<Homepage> {
     setState(() {
       _selectedItems[index] = !_selectedItems[index];
     });
+    if (_selectedItems[index]) {
+      _addToCart(recipe);
+    } else {
+      // Assuming you have a method to remove items from the cart
+      _recipeStore.removeFromCart(recipe.id);
+    }
   }
 
   Future<void> _addToCart(Recipe recipe) async {
