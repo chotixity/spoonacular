@@ -50,29 +50,28 @@ mixin _$RecipeStore on _RecipeStore, Store {
         .run(() => super.storeRecipesToIsar());
   }
 
-  late final _$_RecipeStoreActionController =
-      ActionController(name: '_RecipeStore', context: context);
+  late final _$addToCartAsyncAction =
+      AsyncAction('_RecipeStore.addToCart', context: context);
 
   @override
-  void addToCart(CartItem item) {
-    final _$actionInfo = _$_RecipeStoreActionController.startAction(
-        name: '_RecipeStore.addToCart');
-    try {
-      return super.addToCart(item);
-    } finally {
-      _$_RecipeStoreActionController.endAction(_$actionInfo);
-    }
+  Future<void> addToCart(CartItem cartItem) {
+    return _$addToCartAsyncAction.run(() => super.addToCart(cartItem));
   }
 
+  late final _$removeFromCartAsyncAction =
+      AsyncAction('_RecipeStore.removeFromCart', context: context);
+
   @override
-  void removeFromCart(int id) {
-    final _$actionInfo = _$_RecipeStoreActionController.startAction(
-        name: '_RecipeStore.removeFromCart');
-    try {
-      return super.removeFromCart(id);
-    } finally {
-      _$_RecipeStoreActionController.endAction(_$actionInfo);
-    }
+  Future<void> removeFromCart(int id) {
+    return _$removeFromCartAsyncAction.run(() => super.removeFromCart(id));
+  }
+
+  late final _$_updateCartItemsAsyncAction =
+      AsyncAction('_RecipeStore._updateCartItems', context: context);
+
+  @override
+  Future<void> _updateCartItems() {
+    return _$_updateCartItemsAsyncAction.run(() => super._updateCartItems());
   }
 
   @override

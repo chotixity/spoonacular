@@ -21,44 +21,28 @@ abstract class _RecipeStore with Store {
 
   @action
   Future<void> storeRecipesToIsar() async {
-    _apiService.fetchFoodItems();
-    //await LocalStorage.storeRecipesIfEmpty(fetchedRecipes);
-    //recipes.addAll(fetchedRecipes);
+    await _apiService.fetchFoodItems();
+    final storedRecipes = await LocalStorage.getRecipes();
+    recipes = ObservableList<Recipe>.of(storedRecipes);
   }
 
   @action
-  void addToCart(CartItem item) {
-    final index = cartItems.indexWhere((cartItem) => cartItem.id == item.id);
-    if (index != -1) {
-      final existingItem = cartItems[index];
-      final updatedItem = CartItem(
-        id: existingItem.id,
-        name: existingItem.name,
-        image: existingItem.image,
-        count: existingItem.count + 1,
-      );
-      cartItems[index] = updatedItem;
-    } else {
-      cartItems.add(item);
-    }
+  Future<void> addToCart(CartItem cartItem) async {
+    await LocalStorage.addToCart(cartItem);
+    await _updateCartItems();
+    print(cartItems);
   }
 
   @action
-  void removeFromCart(int id) {
-    final index = cartItems.indexWhere((item) => item.id == id);
-    if (index != -1) {
-      final selectedItem = cartItems[index];
-      if (selectedItem.count > 1) {
-        final updatedItem = CartItem(
-          id: selectedItem.id,
-          name: selectedItem.name,
-          image: selectedItem.image,
-          count: selectedItem.count - 1,
-        );
-        cartItems[index] = updatedItem;
-      } else {
-        cartItems.removeAt(index);
-      }
-    }
+  Future<void> removeFromCart(int id) async {
+    await LocalStorage.removeFromCart(id);
+    await _updateCartItems();
+  }
+
+  @action
+  Future<void> _updateCartItems() async {
+    final cartItemsList = await LocalStorage.getCartItems();
+    print('This is the cart Item List $cartItemsList');
+    cartItems = ObservableList<CartItem>.of(cartItemsList);
   }
 }

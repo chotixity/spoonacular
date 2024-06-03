@@ -34,21 +34,20 @@ class _HomepageState extends State<Homepage> {
     });
   }
 
-  void _toggleAdditionToCart(int index, Recipe recipe) {
+  void _toggleSelection(int index, Recipe recipe) {
     setState(() {
       _selectedItems[index] = !_selectedItems[index];
-      final cartItem = CartItem(
-        id: recipe.id,
-        name: recipe.title,
-        image: recipe.image,
-        count: 1,
-      );
-      if (_selectedItems[index]) {
-        _recipeStore.addToCart(cartItem);
-      } else {
-        _recipeStore.removeFromCart(cartItem.id);
-      }
     });
+  }
+
+  Future<void> _addToCart(Recipe recipe) async {
+    final cartItem = CartItem(
+      id: recipe.id,
+      name: recipe.title,
+      image: recipe.image,
+      count: 1,
+    );
+    await _recipeStore.addToCart(cartItem);
   }
 
   @override
@@ -64,7 +63,12 @@ class _HomepageState extends State<Homepage> {
               child: IconButton(
                 onPressed: () {
                   Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => CartScreen()));
+                    MaterialPageRoute(
+                      builder: (context) => CartScreen(
+                        recipeStore: _recipeStore,
+                      ),
+                    ),
+                  );
                 },
                 icon: const Icon(
                   Icons.shopping_cart_checkout,
@@ -91,12 +95,12 @@ class _HomepageState extends State<Homepage> {
                 clipBehavior: Clip.antiAliasWithSaveLayer,
                 child: GestureDetector(
                   onTap: () {
-                    _toggleAdditionToCart(index, recipe);
+                    _toggleSelection(index, recipe);
                   },
                   child: GridTile(
                     header: IconButton(
                       onPressed: () {
-                        _toggleAdditionToCart(index, recipe);
+                        _toggleSelection(index, recipe);
                       },
                       icon: _selectedItems[index]
                           ? const Icon(
@@ -120,7 +124,7 @@ class _HomepageState extends State<Homepage> {
                       ),
                       trailing: IconButton(
                         onPressed: () {
-                          _toggleAdditionToCart(index, recipe);
+                          _addToCart(recipe);
                         },
                         icon: const Icon(
                           Icons.add_shopping_cart,
