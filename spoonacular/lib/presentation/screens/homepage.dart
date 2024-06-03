@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'dart:isolate';
 import 'package:spoonacular/logic/recipe_store.dart';
+import 'package:mobx/mobx.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import '../../models/food_item.dart';
+import '../../models/recipe_item.dart';
+import '../../models/cart_item.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:spoonacular/presentation/screens/cart_screen.dart';
 import 'package:spoonacular/repository/local_storage.dart';
@@ -16,11 +17,38 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   final RecipeStore _recipeStore = RecipeStore();
+  List<bool> _selectedItems = [];
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    _recipeStore.storeRecipestoIsar();
+    _recipeStore.storeRecipesToIsar();
+    _initializeRecipes();
+  }
+
+  Future<void> _initializeRecipes() async {
+    final recipes = await LocalStorage.getRecipes();
+    setState(() {
+      _recipeStore.recipes = ObservableList<Recipe>.of(recipes);
+      _selectedItems = List<bool>.filled(recipes.length, false);
+    });
+  }
+
+  void _toggleAdditionToCart(int index, Recipe recipe) {
+    setState(() {
+      _selectedItems[index] = !_selectedItems[index];
+      final cartItem = CartItem(
+        id: recipe.id,
+        name: recipe.title,
+        image: recipe.image,
+        count: 1,
+      );
+      if (_selectedItems[index]) {
+        _recipeStore.addToCart(cartItem);
+      } else {
+        _recipeStore.removeFromCart(cartItem.id);
+      }
+    });
   }
 
   @override
@@ -35,8 +63,8 @@ class _HomepageState extends State<Homepage> {
               count: _recipeStore.cartItems.length,
               child: IconButton(
                 onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const CartScreen()));
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => CartScreen()));
                 },
                 icon: const Icon(
                   Icons.shopping_cart_checkout,
@@ -46,57 +74,70 @@ class _HomepageState extends State<Homepage> {
           })
         ],
       ),
-      body: FutureBuilder(
-        future: LocalStorage.getRecipes(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            final List<Recipe> data = snapshot.data!;
-            print(data);
-            return GridView.builder(
-              itemCount: data.length,
-              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 480,
-                crossAxisSpacing: 4,
-                mainAxisSpacing: 4,
-              ),
-              itemBuilder: (context, index) {
-                return Card(
-                  clipBehavior: Clip.antiAliasWithSaveLayer,
+      body: Observer(builder: (_) {
+        if (_recipeStore.recipes.isEmpty) {
+          return const Center(child: CircularProgressIndicator());
+        } else {
+          return GridView.builder(
+            itemCount: _recipeStore.recipes.length,
+            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 480,
+              crossAxisSpacing: 4,
+              mainAxisSpacing: 4,
+            ),
+            itemBuilder: (context, index) {
+              final recipe = _recipeStore.recipes[index];
+              return Card(
+                clipBehavior: Clip.antiAliasWithSaveLayer,
+                child: GestureDetector(
+                  onTap: () {
+                    _toggleAdditionToCart(index, recipe);
+                  },
                   child: GridTile(
-                    footer: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Flexible(
-                          child: Text(
-                            data[index].title,
-                            softWrap: true,
-                            overflow: TextOverflow.clip,
-                          ),
+                    header: IconButton(
+                      onPressed: () {
+                        _toggleAdditionToCart(index, recipe);
+                      },
+                      icon: _selectedItems[index]
+                          ? const Icon(
+                              Icons.check_circle,
+                              color: Colors.green,
+                            )
+                          : const Icon(
+                              Icons.check_circle_outline,
+                              color: Colors.white,
+                            ),
+                    ),
+                    footer: GridTileBar(
+                      backgroundColor: Colors.black45,
+                      title: Text(
+                        recipe.title,
+                        softWrap: true,
+                        style: const TextStyle(
+                          color: Colors.white,
                         ),
-                        IconButton(
-                          onPressed: () {
-                            _recipeStore.addToCart(data[index]);
-                          },
-                          icon: const Icon(
-                            Icons.add_shopping_cart,
-                          ),
-                        )
-                      ],
+                        overflow: TextOverflow.clip,
+                      ),
+                      trailing: IconButton(
+                        onPressed: () {
+                          _toggleAdditionToCart(index, recipe);
+                        },
+                        icon: const Icon(
+                          Icons.add_shopping_cart,
+                        ),
+                      ),
                     ),
                     child: CachedNetworkImage(
                       fit: BoxFit.cover,
-                      imageUrl: data[index].image,
+                      imageUrl: recipe.image,
                     ),
                   ),
-                );
-              },
-            );
-          } else if (snapshot.hasError) {
-            return const Text('Aw, Snap! An eroor occured');
-          }
-          return const CircularProgressIndicator();
-        },
-      ),
+                ),
+              );
+            },
+          );
+        }
+      }),
     );
   }
 }

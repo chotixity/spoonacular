@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'package:spoonacular/models/food_item.dart';
+import 'package:spoonacular/models/recipe_item.dart';
 import 'package:spoonacular/repository/local_storage.dart';
 
 class ApiService {
@@ -24,7 +24,7 @@ class ApiService {
       List<Recipe> recipeItems =
           recipes.map((item) => Recipe.fromJson(item)).toList();
       LocalStorage.storeRecipesIfEmpty(recipeItems);
-      debugPrint(recipeItems.toString());
+      //debugPrint(recipeItems.toString());
     } else {
       throw Exception('Failed to load food items');
     }

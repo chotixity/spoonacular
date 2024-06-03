@@ -2,7 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import '../models/recipe_isar.dart';
-import '../models/food_item.dart';
+import '../models/recipe_item.dart';
+import '../models/cart_isar.dart';
 
 class LocalStorage {
   static late Isar isar;
@@ -10,9 +11,7 @@ class LocalStorage {
   static Future<void> initIsar() async {
     final dir = await getApplicationDocumentsDirectory();
     isar = await Isar.open(
-      [
-        RecipeIsarSchema,
-      ],
+      [RecipeIsarSchema, CartItemIsarSchema],
       directory: dir.path,
     );
   }
@@ -35,39 +34,36 @@ class LocalStorage {
   }
 
   // static Future<void> addToCart(Recipe recipe) async {
-  //   final cartItem = CartItem()
-  //     ..id = recipe.id
-  //     ..title = recipe.title
-  //     ..image = recipe.image;
-
   //   await isar.writeTxn(() async {
-  //     await isar.cartItems.put(cartItem);
+  //     final existingItem =
+  //       await isar.cartItemIsars.where().filter().nameEqualTo(value)
+  //     if (existingItem != null) {
+  //       existingItem.count++;
+  //       await isar.cartItemIsars.put(existingItem);
+  //     } else {
+  //       final cartItem = CartItemIsar()
+  //         ..id = recipe.id
+  //         ..name = recipe.title
+  //         ..image = recipe.image
+  //         ..count = 1;
+  //       await isar.cartItemIsars.put(cartItem);
+  //     }
   //   });
   // }
 
   // static Future<void> removeFromCart(String id) async {
   //   await isar.writeTxn(() async {
-  //     await isar.cartItems.where().idEqualTo(id).deleteFirst();
+  //     final existingItem =
+  //         await isar.cartItemIsars.filter().idEqualTo(id).findFirst();
+  //     if (existingItem != null) {
+  //       if (existingItem.count > 1) {
+  //         existingItem.count--;
+  //         await isar.cartItemIsars.put(existingItem);
+  //       } else {
+  //         await isar.cartItemIsars.delete(existingItem.isarId!);
+  //       }
+  //     }
   //   });
-  // }
-
-  // static Future<List<Recipe>> getCartItems() async {
-  //   final items = await isar.cartItems.where().findAll();
-  //   return items.map((cartItem) => cartItem.toRecipe()).toList();
-  // }
-
-  // static Future<void> checkout() async {
-  //   final cartItems = await getCartItems();
-  //   if (cartItems.isNotEmpty) {
-  //     final checkout = Checkout()
-  //       ..timestamp = DateTime.now()
-  //       ..items = cartItems.map((item) => RecipeIsar.fromRecipe(item)).toList();
-
-  //     await isar.writeTxn(() async {
-  //       await isar.checkouts.put(checkout);
-  //       await isar.cartItems.where().deleteAll();
-  //     });
-  //   }
   // }
 
   // static Future<List<Checkout>> getCheckoutHistory() async {
