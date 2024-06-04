@@ -23,47 +23,49 @@ class CartScreen extends StatelessWidget {
           } else {
             return Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: cartItems.length,
-                      itemBuilder: (context, index) {
-                        final cartItem = cartItems[index];
-                        return Dismissible(
-                          key: Key(cartItem.id.toString()),
-                          onDismissed: (direction) {
-                            recipeStore.removeFromCart(cartItem.id);
-                          },
-                          background: Container(color: Colors.red),
-                          child: ListTile(
-                            leading: Image.network(cartItem.image),
-                            title: Text(cartItem.name),
-                            subtitle: Text('Quantity: ${cartItem.count}'),
-                            trailing: IconButton(
-                              onPressed: () {
-                                recipeStore.removeFromCart(cartItem.id);
-                              },
-                              icon: const Icon(
-                                Icons.delete_forever,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: cartItems.length,
+                        itemBuilder: (context, index) {
+                          final cartItem = cartItems[index];
+                          return Dismissible(
+                            key: Key(cartItem.id.toString()),
+                            onDismissed: (direction) {
+                              recipeStore.removeFromCart(cartItem.id);
+                            },
+                            background: Container(color: Colors.red),
+                            child: ListTile(
+                              leading: Image.network(cartItem.image),
+                              title: Text(cartItem.name),
+                              subtitle: Text('Quantity: ${cartItem.count}'),
+                              trailing: IconButton(
+                                onPressed: () {
+                                  recipeStore.removeFromCart(cartItem.id);
+                                },
+                                icon: const Icon(
+                                  Icons.delete_forever,
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      recipeStore.checkout();
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const SuccessCheckout()));
-                    },
-                    child: const Text('Checkout'),
-                  )
-                ],
+                    ElevatedButton(
+                      onPressed: () {
+                        recipeStore.checkout();
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SuccessCheckout()));
+                      },
+                      child: const Text('Checkout'),
+                    )
+                  ],
+                ),
               ),
             );
           }
