@@ -50,7 +50,8 @@ class _HomepageState extends State<Homepage> {
     final cartItem = CartItem(
       id: recipe.id,
       name: recipe.title,
-      image: recipe.image,
+      image: recipe.image ??
+          'https://images.pexels.com/photos/3872366/pexels-photo-3872366.jpeg?auto=compress&cs=tinysrgb&w=400&lazy=load',
       count: 1,
     );
     await _recipeStore.addToCart(cartItem);
@@ -139,7 +140,8 @@ class _HomepageState extends State<Homepage> {
                     ),
                     child: CachedNetworkImage(
                       fit: BoxFit.cover,
-                      imageUrl: recipe.image,
+                      imageUrl: recipe.image ??
+                          "https://images.pexels.com/photos/3872366/pexels-photo-3872366.jpeg?auto=compress&cs=tinysrgb&w=400&lazy=load",
                     ),
                   ),
                 ),

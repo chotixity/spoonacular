@@ -24,6 +24,7 @@ class RecipeIsar {
     return RecipeIsar()
       ..id = recipe.id
       ..title = recipe.title
-      ..image = recipe.image;
+      ..image = recipe.image ??
+          "https://images.pexels.com/photos/3872366/pexels-photo-3872366.jpeg?auto=compress&cs=tinysrgb&w=400&lazy=load";
   }
 }

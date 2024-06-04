@@ -22,7 +22,7 @@ Recipe _$RecipeFromJson(Map<String, dynamic> json) {
 mixin _$Recipe {
   int get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
-  String get image => throw _privateConstructorUsedError;
+  String? get image => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -34,7 +34,7 @@ abstract class $RecipeCopyWith<$Res> {
   factory $RecipeCopyWith(Recipe value, $Res Function(Recipe) then) =
       _$RecipeCopyWithImpl<$Res, Recipe>;
   @useResult
-  $Res call({int id, String title, String image});
+  $Res call({int id, String title, String? image});
 }
 
 /// @nodoc
@@ -52,7 +52,7 @@ class _$RecipeCopyWithImpl<$Res, $Val extends Recipe>
   $Res call({
     Object? id = null,
     Object? title = null,
-    Object? image = null,
+    Object? image = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -63,10 +63,10 @@ class _$RecipeCopyWithImpl<$Res, $Val extends Recipe>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      image: null == image
+      image: freezed == image
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ) as $Val);
   }
 }
@@ -78,7 +78,7 @@ abstract class _$$RecipeImplCopyWith<$Res> implements $RecipeCopyWith<$Res> {
       __$$RecipeImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int id, String title, String image});
+  $Res call({int id, String title, String? image});
 }
 
 /// @nodoc
@@ -94,7 +94,7 @@ class __$$RecipeImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? title = null,
-    Object? image = null,
+    Object? image = freezed,
   }) {
     return _then(_$RecipeImpl(
       id: null == id
@@ -105,10 +105,10 @@ class __$$RecipeImplCopyWithImpl<$Res>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      image: null == image
+      image: freezed == image
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
@@ -116,8 +116,7 @@ class __$$RecipeImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$RecipeImpl implements _Recipe {
-  const _$RecipeImpl(
-      {required this.id, required this.title, required this.image});
+  const _$RecipeImpl({required this.id, required this.title, this.image});
 
   factory _$RecipeImpl.fromJson(Map<String, dynamic> json) =>
       _$$RecipeImplFromJson(json);
@@ -127,7 +126,7 @@ class _$RecipeImpl implements _Recipe {
   @override
   final String title;
   @override
-  final String image;
+  final String? image;
 
   @override
   String toString() {
@@ -166,7 +165,7 @@ abstract class _Recipe implements Recipe {
   const factory _Recipe(
       {required final int id,
       required final String title,
-      required final String image}) = _$RecipeImpl;
+      final String? image}) = _$RecipeImpl;
 
   factory _Recipe.fromJson(Map<String, dynamic> json) = _$RecipeImpl.fromJson;
 
@@ -175,7 +174,7 @@ abstract class _Recipe implements Recipe {
   @override
   String get title;
   @override
-  String get image;
+  String? get image;
   @override
   @JsonKey(ignore: true)
   _$$RecipeImplCopyWith<_$RecipeImpl> get copyWith =>

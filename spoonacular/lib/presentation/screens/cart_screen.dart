@@ -26,7 +26,8 @@ class CartScreen extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    Expanded(
+                    SizedBox(
+                      height: MediaQuery.sizeOf(context).height * .8,
                       child: ListView.builder(
                         itemCount: cartItems.length,
                         itemBuilder: (context, index) {
@@ -55,6 +56,11 @@ class CartScreen extends StatelessWidget {
                       ),
                     ),
                     ElevatedButton(
+                      style: const ButtonStyle(
+                          foregroundColor:
+                              WidgetStatePropertyAll<Color>(Colors.white),
+                          backgroundColor:
+                              WidgetStatePropertyAll<Color>(Colors.green)),
                       onPressed: () {
                         recipeStore.checkout();
                         Navigator.pushReplacement(

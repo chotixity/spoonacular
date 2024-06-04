@@ -8,7 +8,7 @@ class Recipe with _$Recipe {
   const factory Recipe({
     required int id,
     required String title,
-    required String image,
+    String? image,
   }) = _Recipe;
 
   factory Recipe.fromJson(Map<String, dynamic> json) => _$RecipeFromJson(json);
