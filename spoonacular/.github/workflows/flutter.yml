@@ -6,9 +6,9 @@ on: #events (push and pull_request)
   pull_request:
     branches: ["main"]
 
-jobs: #here we specify the jobs - We could have multiple jobs
-  build: #name it something meaningful
-    runs-on: ubuntu-latest #runner: select a machine to use
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
