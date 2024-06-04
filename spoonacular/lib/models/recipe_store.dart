@@ -29,18 +29,18 @@ abstract class _RecipeStore with Store {
   @action
   Future<void> addToCart(CartItem cartItem) async {
     await LocalStorage.addToCart(cartItem);
-    await _updateCartItems();
+    await updateCartItems();
     print(cartItems);
   }
 
   @action
   Future<void> removeFromCart(int id) async {
     await LocalStorage.removeFromCart(id);
-    await _updateCartItems();
+    await updateCartItems();
   }
 
   @action
-  Future<void> _updateCartItems() async {
+  Future<void> updateCartItems() async {
     final cartItemsList = await LocalStorage.getCartItems();
     print('This is the cart Item List $cartItemsList');
     cartItems = ObservableList<CartItem>.of(cartItemsList);
@@ -49,6 +49,6 @@ abstract class _RecipeStore with Store {
   Future<void> checkout() async {
     await _apiService.checkout(cartItems);
     await LocalStorage.clearCart();
-    _updateCartItems();
+    updateCartItems();
   }
 }

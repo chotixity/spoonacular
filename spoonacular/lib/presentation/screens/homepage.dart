@@ -28,6 +28,7 @@ class _HomepageState extends State<Homepage> {
 
   Future<void> _initializeRecipes() async {
     final recipes = await LocalStorage.getRecipes();
+    await _recipeStore.updateCartItems();
     setState(() {
       _recipeStore.recipes = ObservableList<Recipe>.of(recipes);
       _selectedItems = List<bool>.filled(recipes.length, false);
@@ -41,7 +42,6 @@ class _HomepageState extends State<Homepage> {
     if (_selectedItems[index]) {
       _addToCart(recipe);
     } else {
-      // Assuming you have a method to remove items from the cart
       _recipeStore.removeFromCart(recipe.id);
     }
   }

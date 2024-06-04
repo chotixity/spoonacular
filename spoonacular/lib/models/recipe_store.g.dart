@@ -66,12 +66,12 @@ mixin _$RecipeStore on _RecipeStore, Store {
     return _$removeFromCartAsyncAction.run(() => super.removeFromCart(id));
   }
 
-  late final _$_updateCartItemsAsyncAction =
-      AsyncAction('_RecipeStore._updateCartItems', context: context);
+  late final _$updateCartItemsAsyncAction =
+      AsyncAction('_RecipeStore.updateCartItems', context: context);
 
   @override
-  Future<void> _updateCartItems() {
-    return _$_updateCartItemsAsyncAction.run(() => super._updateCartItems());
+  Future<void> updateCartItems() {
+    return _$updateCartItemsAsyncAction.run(() => super.updateCartItems());
   }
 
   @override
